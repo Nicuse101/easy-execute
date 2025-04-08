@@ -1,3 +1,7 @@
+if getgenv().EasyExecute == true then
+    return
+end
+getgenv().EasyExecute = true
 local args = {...}
 if WebSocket and WebSocket.connect and type(WebSocket.connect) == "function" then
     return task.spawn(function()
@@ -31,5 +35,6 @@ if WebSocket and WebSocket.connect and type(WebSocket.connect) == "function" the
     end)
 else
     error('Easy Execute: Unsupported executor.')
+    getgenv().EasyExecute = false
     return
 end
