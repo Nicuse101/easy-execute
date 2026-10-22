@@ -12,7 +12,9 @@ if WebSocket and WebSocket.connect and type(WebSocket.connect) == "function" the
                 queueteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/Nicuse101/easy-execute/refs/heads/master/loader.lua"))(' .. tostring(port) .. ', '.. address .. ')')
             end)
         end
-        local WebSocket = WebSocket.connect('ws://'..address..':'..tostring(port))
+        local full_address = address..":"..tostring(port)
+        print("Attempting to connect to"..full_address")
+        local WebSocket = WebSocket.connect('ws://'..full_address)
     
         local function getTextAfterPrefix(str, prefix)
             if string.sub(str, 1, #prefix) == prefix then
@@ -23,6 +25,7 @@ if WebSocket and WebSocket.connect and type(WebSocket.connect) == "function" the
         end
     
         WebSocket:Send('Connected!')
+        print("Successfully connected to"..full_address")
     
         WebSocket.OnMessage:Connect(function(msg)
             local result = getTextAfterPrefix(msg, 'execute:')
