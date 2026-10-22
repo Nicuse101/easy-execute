@@ -9,7 +9,7 @@ if WebSocket and WebSocket.connect and type(WebSocket.connect) == "function" the
         local address = args[2] or "localhost"
         if queueteleport ~= nil and type(queueteleport) == "function" then
             pcall(function()
-                queueteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/Nicuse101/easy-execute/refs/heads/master/loader.lua"))(' .. tostring(port) .. ')')
+                queueteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/Nicuse101/easy-execute/refs/heads/master/loader.lua"))(' .. tostring(port) .. ', '.. address .. ')')
             end)
         end
         local WebSocket = WebSocket.connect('ws://'..address..':'..tostring(port))
