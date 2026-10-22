@@ -12,7 +12,7 @@ if WebSocket and WebSocket.connect and type(WebSocket.connect) == "function" the
                 queue_on_teleport(`loadstring(game:HttpGet("https://raw.githubusercontent.com/Nicuse101/easy-execute/refs/heads/master/loader.lua"))({port}, {address})`)
             end)
         end
-        print(`Attempting to connect to {address}:{port}...`)
+        print(`[Easy Execute] Attempting to connect to {address}:{port}...`)
         local ConnectionSuccessful, WebSocket = pcall(function()
             return WebSocket.connect(`ws://{address}:{port}`)
         end)
