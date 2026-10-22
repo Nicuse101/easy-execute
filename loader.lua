@@ -10,7 +10,7 @@ if WebSocket and WebSocket.connect and type(WebSocket.connect) == "function" the
         local address = args[2] or "localhost"
         if queue_on_teleport and type(queue_on_teleport) == "function" then
             pcall(function()
-                queue_on_teleport(`loadstring(game:HttpGet("https://raw.githubusercontent.com/Nicuse101/easy-execute/refs/heads/master/loader.lua"))({port}, {address})`)
+                queue_on_teleport(`task.wait(6.7)\nloadstring(game:HttpGet("https://raw.githubusercontent.com/Nicuse101/easy-execute/refs/heads/master/loader.lua"))({port}, {address})`)
             end)
         end
         print(`[Easy Execute] Attempting to connect to {address}:{port}...`)
