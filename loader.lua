@@ -6,12 +6,13 @@ local args = {...}
 if WebSocket and WebSocket.connect and type(WebSocket.connect) == "function" then
     return task.spawn(function()
         local port = args[1] or 8080
+        local address = args[2] or "localhost"
         if queueteleport ~= nil and type(queueteleport) == "function" then
             pcall(function()
                 queueteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/Nicuse101/easy-execute/refs/heads/master/loader.lua"))(' .. tostring(port) .. ')')
             end)
         end
-        local WebSocket = WebSocket.connect('ws://localhost:'..tostring(port))
+        local WebSocket = WebSocket.connect('ws://'..address..':'..tostring(port))
     
         local function getTextAfterPrefix(str, prefix)
             if string.sub(str, 1, #prefix) == prefix then
