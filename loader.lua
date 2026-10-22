@@ -1,4 +1,5 @@
 if getgenv().EasyExecute == true then
+    print(`[Easy Execute] Already executed! To execute anyway, set EasyExecute global to false.`)
     return
 end
 getgenv().EasyExecute = true
