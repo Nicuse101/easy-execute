@@ -8,7 +8,7 @@ if WebSocket and WebSocket.connect and type(WebSocket.connect) == "function" the
     return task.spawn(function()
         local port = args[1] or 8080
         local address = args[2] or "localhost"
-        if queue_on_teleport and type(queue_on_teleport) == "function" then
+        if not getgenv().no_qot and queue_on_teleport and type(queue_on_teleport) == "function" then
             pcall(function()
                 queue_on_teleport(`task.wait(6.7)\nloadstring(game:HttpGet("https://raw.githubusercontent.com/Nicuse101/easy-execute/refs/heads/master/loader.lua"))({port}, {address})`)
             end)
