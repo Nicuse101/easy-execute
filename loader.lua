@@ -7,14 +7,22 @@ if WebSocket and WebSocket.connect and type(WebSocket.connect) == "function" the
     return task.spawn(function()
         local port = args[1] or 8080
         local address = args[2] or "localhost"
-        if queueteleport ~= nil and type(queueteleport) == "function" then
+        if queue_on_teleport and type(queue_on_teleport) == "function" then
             pcall(function()
-                queueteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/Nicuse101/easy-execute/refs/heads/master/loader.lua"))(' .. tostring(port) .. ', '.. address .. ')')
+                queue_on_teleport(`loadstring(game:HttpGet("https://raw.githubusercontent.com/Nicuse101/easy-execute/refs/heads/master/loader.lua"))({port}, {address})`)
             end)
         end
-        local full_address = address..":"..tostring(port)
-        print("Attempting to connect to"..full_address")
-        local WebSocket = WebSocket.connect('ws://'..full_address)
+        print(`Attempting to connect to {address}:{port}...`)
+        local ConnectionSuccessful, WebSocket = pcall(function()
+            return WebSocket.connect(`ws://{address}:{port}`)
+        end)
+        if ConnectionSuccessful then
+            print(`[Easy Execute] Successfully connected to {address}:{port}!`)
+            WebSocket:Send(`Client connected {game:GetService("Players").LocalPlayer.Name}`)
+        else
+            getgenv().EasyExecute = false
+            error(`[Easy Execute] Failed to connect to {address}:{port}`)
+        end
     
         local function getTextAfterPrefix(str, prefix)
             if string.sub(str, 1, #prefix) == prefix then
@@ -24,21 +32,27 @@ if WebSocket and WebSocket.connect and type(WebSocket.connect) == "function" the
             end
         end
     
-        WebSocket:Send('Connected!')
-        print("Successfully connected to"..full_address")
-    
         WebSocket.OnMessage:Connect(function(msg)
+            local start = os.clock()
             local result = getTextAfterPrefix(msg, 'execute:')
             if result ~= nil then
-                task.spawn(loadstring(result))
-                WebSocket:Send('Successfully executed')
+                local success, err = pcall(function()
+                    return loadstring(result)()
+                end)
+                if success then
+                    print(`[Easy Execute] Successfully executed from server in {os.clock() - start}s.`)
+                    WebSocket:Send('Successfully executed')
+                else
+                    error(`An error occured while trying to execute script from server: {err}`)
+                    WebSocket:Send(`An error occured while trying to execute the script: {err}`)
+                end
             end
         end)
     
-        while true do wait() end
+        while true do task.wait() end -- Keep connection alive
     end)
 else
-    error('Easy Execute: Unsupported executor.')
     getgenv().EasyExecute = false
+    error('[Easy Execute] Unsupported executor.')
     return
 end
