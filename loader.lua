@@ -36,6 +36,13 @@ if WebSocket and WebSocket.connect and type(WebSocket.connect) == "function" the
         WebSocket.OnMessage:Connect(function(msg)
             local start = os.clock()
             local result = getTextAfterPrefix(msg, 'execute:')
+            local size = #result
+            local formatted_size = `{size} bytes`
+            if size > 1024 and size < 1024^2 then
+                formatted_size = `{size/1024} KB`
+            elseif size > 1024^2 then
+                formatted_size = `{size/(1024^2)} MB`
+            end
             if result ~= nil then
                 local success, err = pcall(function()
                     return loadstring(result)()
