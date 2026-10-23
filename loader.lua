@@ -48,7 +48,7 @@ if WebSocket and WebSocket.connect and type(WebSocket.connect) == "function" the
                     return loadstring(result)()
                 end)
                 if success then
-                    print(`[Easy Execute] Successfully executed from server in {os.clock() - start}s.`)
+                    print(`[Easy Execute] Successfully executed {formatted_size} script from server in {os.clock() - start}s.`)
                     WebSocket:Send('Successfully executed')
                 else
                     error(`An error occured while trying to execute script from server: {err}`)
